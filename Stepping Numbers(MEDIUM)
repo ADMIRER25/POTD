@@ -1,0 +1,97 @@
+Expected Time Complexity: O(log(M))
+Expected Auxiliary Space: O(SN) where SN is the number of stepping numbers in the range
+
+#include<bits/stdc++.h>
+using namespace std;
+..................................................
+using dfs ................
+class Solution{
+public:
+
+    int steppingNumbers(int n, int m)
+    {
+        int ans = 0;
+        if(n == 0) ans++;
+        for(int i = 1; i <= 9;i++)
+        {
+            dfs(i,n,m,ans);
+        }
+        return ans;
+    }
+    void dfs(int num,int n,int m,int &ans)
+    {
+        if (num > m) return;
+        if(num >= n && num <= m) ans++;
+        int lastdigit = num % 10;
+        if (lastdigit == 0) dfs(num *10 + (lastdigit+1),n,m,ans);
+        else if(lastdigit == 9) dfs(num *10 + (lastdigit-1),n,m,ans);
+        else
+        {
+           dfs(num *10+ (lastdigit+1),n,m,ans);
+           dfs(num *10 + (lastdigit-1),n,m,ans);
+        }
+    }
+};
+.................................................................................
+using bfs.............................
+
+class Solution{
+public:
+
+    int steppingNumbers(int n, int m)
+    {
+        int ans = 0;
+        if(n == 0) ans++;
+        queue<int>q;
+        for(int i = 1; i <= 9;i++)
+        {
+            q.push(i);
+        }
+        while(q.size())
+        {
+            int num = q.front();
+            q.pop();
+            // if the number is outside the range
+            if(num > m) continue;
+            // if the number is inside the range
+            if(num >= n && num <= m) ans++;
+            int lastdigit = num % 10;
+            int t1 = num * 10 + (lastdigit + 1);
+            int t2 = num * 10 + (lastdigit - 1);
+            if(lastdigit == 0) 
+            {
+                q.push(t1);
+            }
+            else if(lastdigit == 9)
+            {
+                q.push(t2);
+            }
+            else 
+            {
+                q.push(t1);
+                q.push(t2);
+            }
+        }
+        return ans;
+    }
+};
+
+
+//{ Driver Code Starts.
+
+int main()
+{
+    Solution obj;
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n, m;
+        cin>>n>>m;
+        cout << obj.steppingNumbers(n,m) << endl;
+    }
+	return 0;
+}
+
+
+// } Driver Code Ends
