@@ -1,0 +1,29 @@
+T.c ---> O(NlongN)
+S.c--> O(N)
+.................................................................................
+
+struct alphanumeric {
+    string name;
+    int count;
+};
+class Solution {
+  public:
+    vector<alphanumeric> sortedStrings(int N, vector<string> A)
+    {
+        vector<alphanumeric>ans;
+        map<string,int>mp;
+        for(int i = 0; i < N; i++)
+        {
+           mp[A[i]]++; 
+        }
+        map<string,int> :: iterator it;
+        for(it = mp.begin(); it != mp.end(); it++)
+        {
+           alphanumeric obj;
+           obj.name = it -> first;
+           obj.count = it ->second;
+           ans.push_back (obj);
+        }
+        return ans;
+    }
+  };
