@@ -1,0 +1,35 @@
+	int characterReplacement(string s, int k)
+		{
+		    int maxi = 1;
+		   for(int i = 65; i < 91; i++)
+		   {
+		       char ch = i;
+		       int size = s.length();
+		       int left = 0,right = 0,count = 0;
+		       while(right < size)
+		       {
+		           if(s[right] == ch)
+		           {
+		             maxi = max(maxi,right - left + 1);
+		             right++;
+		           }
+		           else
+		           {
+		               if(count < k)
+		               {
+		                   count++;
+		                   maxi = max(maxi,right - left + 1);
+		                   right++;
+		               }
+		               else 
+		               {
+		                   while(s[left] == ch) left++;
+		                   left++;
+		                   maxi = max(maxi,right - left + 1);
+		                   right++;
+		               }
+		           }
+		       }
+		   }
+		   return maxi;
+		}
