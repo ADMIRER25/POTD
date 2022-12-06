@@ -1,0 +1,39 @@
+//User function template for C++
+
+class Solution{   
+    int Left_LESS_Equal(vector<int>&v,int mid,int C)
+    {
+       int low = 0,high = C -1 ;
+       while(low <= high)
+      {
+        int md = low + (high - low)/2;
+        if(v[md] <= mid) low = md + 1;
+        else high = md - 1;
+      }
+      return low;
+    }
+public:
+    int median(vector<vector<int>> &m, int R, int C)
+    {
+        int left = INT_MAX,right = INT_MIN;
+        
+        for(int i = 0; i < R; i++)  
+        {
+         right = max(right,m[i][C-1]);
+         left = min(left,m[i][0]);
+        }
+        int midleft = R * C / 2;
+        while(left <= right)
+        {
+            int mid = left + (right - left)/2;
+            int count = 0;
+            for(int i = 0; i < R; i++)
+            {
+             count += Left_LESS_Equal(m[i],mid, C);
+            }
+            if(count <= midleft) left = mid + 1;
+            else right = mid - 1;
+        }
+        return left;
+    }
+};
