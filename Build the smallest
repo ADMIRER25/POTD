@@ -1,0 +1,59 @@
+//{ Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+string buildLowestNumber(string num, int k);
+// Driver program to test above function
+int main()
+{
+    int t,n;
+    string str;
+    cin>>t;
+    while(t--)
+    {
+    cin>>n;
+    cin>>str;
+    cout << buildLowestNumber(str, n)<<endl;
+    }
+    return 0;
+}
+
+// } Driver Code Ends
+
+
+string buildLowestNumber(string num, int k)
+{
+   stack<char>st;
+   string ans = "";
+   int len = num.length();
+   st.push(num[0]);
+   for(int i = 1; i < len; i++)
+   {
+       char ch = num[i];
+       if(st.size() && ch < st.top())
+       {
+           while(st.size() && k && ch < st.top()) 
+           {
+              st.pop();
+              k--;
+           }
+       }
+        if(st.size() || ch != '0') st.push(ch);
+   }
+   while(st.size() && k--)
+   {
+       st.pop();
+   }
+   if(st.empty()) return "0";
+   while(st.size())
+   {
+       ans += st.top();
+       st.pop();
+   }
+   int l = 0, h = ans.size()-1;
+   while(l <= h)
+   {
+       swap(ans[l],ans[h]);
+       l++,h--;
+   }
+   return ans;
+}
