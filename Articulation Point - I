@@ -1,0 +1,76 @@
+//{ Driver Code Starts
+//Initial Template for C++
+
+#include<bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+//User function Template for C++
+
+class Solution {
+    void dfs(vector<int>adj[],int node,int parent,vector<int>&start,vector<int>&end,vector<int>&vis,vector<int>&temp,int &count)
+    {
+       vis[node] = 1;
+       start[node] = end[node] = count++;
+       int child = 0;
+      for(int it : adj[node])
+      {
+          if(it == parent) continue;
+          if(vis[it])
+          {
+              end[node] = min(end[node],end[it]);
+          }
+          else 
+          {
+            dfs(adj,it,node,start,end,vis,temp,count);
+            if(start[node] <= end[it] && parent != -1) temp[node] = 1;
+            end[node] = min(end[node],end[it]);
+            child++;
+          }
+      }
+      if(parent == -1 && child > 1) temp[node] = 1; // we are using child to count the indiviual children of first node 
+      //first node will not be an articulation point if it has only one individual child because on st node removal we will not get any 
+      //extra graph but if the 1st node having >  child then we can get articulation point
+    }
+  public:
+    vector<int> articulationPoints(int v, vector<int>adj[])
+    {
+       vector<int>start(v,-1);
+       vector<int>end(v,-1);
+       vector<int>vis(v,0);
+       vector<int>temp(v,0); // we can have repeated element in temp we will store the frequency of articulation point
+       vector<int>ans;
+       int count = 0;
+       dfs(adj,0,-1,start,end,vis,temp,count);
+       for(int i = 0; i < v;i++)
+       {
+           if(temp[i]) ans.push_back(i);
+       }
+       if(ans.size() == 0) ans.resize(1,-1);
+       return ans;
+    }
+};
+
+//{ Driver Code Starts.
+
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		int V, E;
+		cin >> V >> E;
+		vector<int>adj[V];
+		for(int i = 0; i < E; i++){
+			int u, v;
+			cin >> u >> v;
+			adj[u].push_back(v);
+			adj[v].push_back(u);
+		}
+		Solution obj;
+		vector<int> ans = obj.articulationPoints(V, adj);
+		for(auto i: ans)cout << i << " ";
+		cout << "\n";
+	}
+	return 0;
+}
+// } Driver Code Ends
