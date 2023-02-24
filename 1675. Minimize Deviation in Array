@@ -1,0 +1,55 @@
+using priority queue//
+class Solution {
+public:
+    int minimumDeviation(vector<int>& nums) 
+    {
+       priority_queue<int>pq;
+       int mini = INT_MAX;
+       for(int x:nums) 
+       {
+           if(x % 2!= 0) x *= 2;
+           mini = min(mini,x);
+           pq.push(x);
+       }
+       int ans = INT_MAX;
+       while(pq.top() % 2 == 0)
+       {
+           int t = pq.top();
+           pq.pop();
+           t /= 2;
+           pq.push(t);
+           mini = min(t,mini);
+           int maxi = pq.top();
+           ans = min(ans,maxi - mini);
+       }
+       return ans;
+    }
+};
+---------------------------------------------------------------------------------
+using set//
+class Solution {
+public:
+    int minimumDeviation(vector<int>& nums) 
+    {
+      set<int>s;// updation in set is not possible
+      for(int x:nums)  
+      {
+          if(x %2 != 0) x *= 2;
+          s.insert(x);
+      }
+      int ans = INT_MAX;   
+      while(true)
+      {
+        int mini = *s.begin();
+        int maxi = *(--s.end());
+        ans = min(ans,maxi -mini);
+        if(maxi % 2 == 0)
+        {
+            s.erase(maxi);
+            s.insert(maxi/2);
+        }
+        else break;
+      }
+      return ans;
+    }
+};
