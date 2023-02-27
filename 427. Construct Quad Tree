@@ -1,0 +1,76 @@
+/*
+// Definition for a QuadTree node.
+class Node {
+public:
+    bool val;
+    bool isLeaf;
+    Node* topLeft;
+    Node* topRight;
+    Node* bottomLeft;
+    Node* bottomRight;
+    
+    Node() {
+        val = false;
+        isLeaf = false;
+        topLeft = NULL;
+        topRight = NULL;
+        bottomLeft = NULL;
+        bottomRight = NULL;
+    }
+    
+    Node(bool _val, bool _isLeaf) {
+        val = _val;
+        isLeaf = _isLeaf;
+        topLeft = NULL;
+        topRight = NULL;
+        bottomLeft = NULL;
+        bottomRight = NULL;
+    }
+    
+    Node(bool _val, bool _isLeaf, Node* _topLeft, Node* _topRight, Node* _bottomLeft, Node* _bottomRight) {
+        val = _val;
+        isLeaf = _isLeaf;
+        topLeft = _topLeft;
+        topRight = _topRight;
+        bottomLeft = _bottomLeft;
+        bottomRight = _bottomRight;
+    }
+};
+*/
+
+class Solution {
+    bool AllSame(vector<vector<int>>& grid,int row,int col,int n)
+    {
+        int val = grid[row][col];
+
+        for(int i = row; i < row+ n; i++)
+        {
+            for(int j = col; j < col + n;j++)
+            {
+                if(val != grid[i][j]) return false;
+            }
+        }
+        return true;
+    }
+public:
+    Node* solve(vector<vector<int>>& grid,int row ,int col,int n)
+    {
+        Node *root;
+        if(AllSame(grid,row,col,n))
+        {
+            //its a leaf node and the value of the lead node will be true if the value of the grid is 1 and false if the value of the grid is 0
+            return new Node((grid[row][col] == 1)? true : false,true);
+        }
+            //it is is a node and the value of the node can be anything 
+            root = new Node(true,false);
+            root ->topLeft = solve(grid,row,col,n/2); //solve(rowstart_idx,colstart_idx,number of elements present in row and col)
+            root -> topRight = solve(grid,row,col+n/2,n/2);
+            root -> bottomLeft = solve(grid,row + n/2,col,n/2);
+            root -> bottomRight = solve(grid,row+n/2,col+n/2,n/2);
+       return root;
+    }
+    Node* construct(vector<vector<int>>& grid)
+    {
+      return solve(grid,0,0,grid.size()); 
+    }
+};
