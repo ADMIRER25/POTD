@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int compress(vector<char>& chars) 
+    {
+      string s = "" ;
+      int n = chars.size();
+      char ch = chars[0];
+      int cnt = 0;
+      for(int i = 0; i < n; i++)
+      {
+          if(ch == chars[i])
+          {
+              cnt++;
+          }
+          else 
+          {
+              if(cnt == 1) s += ch; // if the length the is 1 then only add the character 
+              else s += ch + to_string(cnt); // if the length is more than 1 then add the character as well as add the length of the the character group like a,a,a then add a2
+              cnt = 1;
+              ch = chars[i];
+          }
+      }
+      if(cnt == 1) s += ch; // if the length the is 1 then only add the character 
+      else s += ch + to_string(cnt); 
+      chars.resize(s.length());
+      for(int i = 0 ; i < s.length();i++)
+      {
+          chars[i] = s[i];
+      }
+      return chars.size();
+    }
+};
