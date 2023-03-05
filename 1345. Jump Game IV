@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int minJumps(vector<int>& arr) 
+    {
+       int steps = 0; // initially no steps is covered
+       // we can go to i-1>= 0 and i+1 >= n-1 and the indexes with the same value of the current index value 
+
+    // for storing the position of the element so that we can visit the index whose value is equal to the current val
+       map<int,vector<int>> mp;
+
+       //for string the idexex of an element
+       for(int i = 0;i < arr.size();i++)
+       {
+           mp[arr[i]].push_back(i);
+       }
+       
+        queue<int>q; // use to track the path
+        vector<bool>vis(arr.size(),false);// to keep track of the visited index so that we dont have to go backward again
+        q.push(0);
+        vis[0] = true;
+
+        while(q.size())
+        {
+            int size = q.size();
+
+            for(int i = 0; i < size;i++)
+            {
+                int curr = q.front();
+                q.pop();
+        
+                //if the current idx is equal to n-1 that mens that with the current steps it can possible to reach the index 
+                if(curr == arr.size()-1) return steps;
+
+                //if i-1 >= 0 and the i-1 is not visited yet then visit it
+                if(curr - 1 >= 0 && !vis[curr -1])
+                {
+                    q.push(curr-1); 
+                    vis[curr - 1] = true;
+                }
+
+                 //if i+1 >= n-1 and the i+1 is not visited yet then visit it
+                if(curr + 1 <= arr.size()-1 && !vis[curr + 1])
+                {
+                    q.push(curr + 1);
+                    vis[curr + 1] = true;
+                }
+
+                //now visit the indexes which has the val as current index
+                for(int idx : mp[arr[curr]])
+                {
+                    if(!vis[idx]) 
+                    {
+                        q.push(idx);
+                        vis[idx] = true;
+                    }
+                }
+                mp.erase(arr[curr]); // for an element once you tavel the occurences then no need to again travese again for the same element bcz all the occurences are already visited 
+            }
+            steps++; // after one level is completed then we have to jump
+        }
+        return steps;
+    }
+};
