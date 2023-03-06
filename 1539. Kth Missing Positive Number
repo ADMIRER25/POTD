@@ -1,0 +1,57 @@
+Time Complexity -->O(N)
+Space Complexity -->O(N)
+.................................................................
+class Solution {
+public:
+    int findKthPositive(vector<int>& arr, int k) 
+    {
+        vector<int>miss;
+        map<int,int>mp;
+        int size = arr.size();
+        for(int i = 0; i<size;i++) mp[arr[i]]++;
+        int j = 1;
+       while(miss.size() < k)
+       {
+           if(mp[j] == 0) miss.push_back(j);
+           j++;
+       }
+       return miss[k-1];
+    }
+};
+...................................................................
+Time Complexity -->O(N)
+Space Complexity-->O(1)
+
+class Solution {
+public:
+    int findKthPositive(vector<int>& arr, int k) 
+    {
+        //number lies in the range between [0,arr.size()] or number can be lie outside the range also;
+        int left = 0, right = arr.size(),mid;
+
+        while(left < right)
+        {
+            mid = left + (right - left)/2;
+            
+            //arr[m] : The number of elements should be in the array till m 
+            //mid + 1: The number of elements are really present in the array till m
+            //so the difference will give how many numbers are missing 
+            //if number of missing elements are less than k then we have to increase the number of missing element so we have to upadte the range ,left = mid + 1 ,not left = mid bcz in the previous range [left,mid] missing element is not found
+            if(arr[mid] -(mid+1) < k) 
+            {
+                left = mid+ 1;
+            }
+
+            //if numbers of missing element is >= k then it is clear that the misssing element is present in the range of[left,mid], we have to found this number so the next range will be high = mid; then [left,mid]
+            else 
+            {
+                right = mid;
+            }
+        }
+        //the ans will be arr[left] - ((arr[left]-left-1) - k  + 1) == left + k
+        
+        // arr[left] - (left+1): standing on a current index it will give the missing element                          
+        //  (arr[left]-left-1) - k  + 1: accurate this steps backward from arr[left]   you are able to find the ans                          
+        return left +k +1;
+    }
+};
